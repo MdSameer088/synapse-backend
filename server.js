@@ -72,7 +72,7 @@ const dictionary = new Set([
     'much', 'music', 'must', 'my', 'myself', 'name', 'nation', 'national', 'natural', 'nature',
     'near', 'nearly', 'necessary', 'need', 'network', 'never', 'new', 'news', 'next', 'nice',
     'night', 'no', 'none', 'nor', 'north', 'not', 'note', 'nothing', 'notice', 'now',
-    'n't', 'number', 'occur', 'of', 'off', 'offer', 'office', 'officer', 'official', 'often',
+    "n't", 'number', 'occur', 'of', 'off', 'offer', 'office', 'officer', 'official', 'often',
     'oh', 'oil', 'ok', 'old', 'on', 'once', 'one', 'only', 'onto', 'open',
     'operation', 'opportunity', 'option', 'or', 'order', 'organization', 'other', 'others', 'our', 'out',
     'outside', 'over', 'own', 'owner', 'page', 'pain', 'paint', 'paper', 'parent', 'park',
