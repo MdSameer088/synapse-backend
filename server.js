@@ -50,6 +50,7 @@ wss.on('connection', ws => {
             if (dictionary.has(word) && !foundWords.has(word)) {
                 foundWords.add(word);
                 score += word.length;
+                grid = generateGrid(gridSize); // Regenerate grid on successful word submission
                 broadcastState();
             }
         }
