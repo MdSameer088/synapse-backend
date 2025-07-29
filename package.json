@@ -1,12 +1,12 @@
 {
-  "name": "synapse-backend",
+  "name": "word-game-backend",
   "version": "1.0.0",
-  "description": "Backend for the Synapse word game",
+  "description": "Backend for the word game",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "ws": "^8.18.0"
+    "ws": "^8.13.0"
   }
 }
