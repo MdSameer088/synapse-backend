@@ -9,7 +9,7 @@ let grid = [];
 let foundWords = new Set();
 let scoreboard = {};
 let gameInProgress = false;
-let gameTimer = 60;
+let gameTimer = 100;
 let timerInterval;
 
 // ... (wordList remains the same)
@@ -44,6 +44,7 @@ wss.on('connection', ws => {
                     ws.send(JSON.stringify({ type: 'timer', time: gameTimer }));
                     ws.send(JSON.stringify({ type: 'scoreboard', scoreboard }));
                     ws.send(JSON.stringify({ type: 'foundWords', words: [...foundWords] }));
+                    ws.send(JSON.stringify({ type: 'remainingWords', words: [...getRemainingWords()] }));
                 } else if (Object.keys(players).length >= 1) {
                     // If they are the first player, start the game
                     startGame();
@@ -58,6 +59,7 @@ wss.on('connection', ws => {
                         scoreboard[username] += word.length;
                         broadcast({ type: 'wordFound', word, player: username });
                         broadcast({ type: 'scoreboard', scoreboard });
+                        broadcast({ type: 'remainingWords', words: [...getRemainingWords()] });
                     } else {
                         ws.send(JSON.stringify({ type: 'error', message: 'Invalid or already found word.' }));
                     }
@@ -84,7 +86,7 @@ function startGame() {
     gameInProgress = true;
     grid = generateGrid(10, 10);
     foundWords.clear();
-    gameTimer = 60;
+    gameTimer = 100;
 
     // Reset scores for all known players
     for (const user in scoreboard) {
@@ -93,6 +95,7 @@ function startGame() {
 
     broadcast({ type: 'gameStart', grid });
     broadcast({ type: 'scoreboard', scoreboard });
+    broadcast({ type: 'remainingWords', words: [...getRemainingWords()] });
 
     timerInterval = setInterval(() => {
         gameTimer--;
@@ -169,6 +172,10 @@ function search(word, row, col) {
         }
     }
     return false;
+}
+
+function getRemainingWords() {
+    return new Set([...wordList].filter(word => !foundWords.has(word)));
 }
 
 console.log('WebSocket server started on port 8080');
