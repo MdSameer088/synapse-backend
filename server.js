@@ -23,7 +23,9 @@ wss.on('connection', ws => {
             scoreboard[username] = 0;
             broadcastUserList();
 
-            if (!gameInProgress && Object.keys(players).length >= 1) {
+            if (gameInProgress) {
+                ws.send(JSON.stringify({ type: 'grid', grid }));
+            } else if (Object.keys(players).length >= 1) {
                 startGame();
             }
         }
