@@ -84,7 +84,7 @@ wss.on('connection', ws => {
 
 function startGame() {
     gameInProgress = true;
-    grid = generateGrid(10, 10);
+    grid = generateGrid(5, 5);
     foundWords.clear();
     gameTimer = 100;
 
