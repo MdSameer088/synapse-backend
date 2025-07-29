@@ -155,37 +155,37 @@ function generateGrid(rows, cols) {
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let newGrid = Array(rows).fill(0).map(() => Array(cols).fill(''));
 
-    // Filter wordList for words that can fit in the grid
-    const playableWords = Array.from(wordList).filter(word => word.length <= Math.max(rows, cols));
+    // Sort wordList by length in descending order to prioritize longer words
+    const sortedWordList = Array.from(wordList).sort((a, b) => b.length - a.length);
 
-    // Try to place a few words strategically
-    const wordsToPlace = 5; // Number of words to try and place
-    for (let i = 0; i < wordsToPlace; i++) {
-        const word = playableWords[Math.floor(Math.random() * playableWords.length)].toUpperCase();
+    const directions = [
+        [0, 1], [1, 0], [0, -1], [-1, 0], // Horizontal and Vertical
+        [1, 1], [1, -1], [-1, 1], [-1, -1] // Diagonal
+    ];
+
+    // Attempt to place each word from the sorted list
+    sortedWordList.forEach(word => {
+        const wordUpper = word.toUpperCase();
         let placed = false;
         let attempts = 0;
-        while (!placed && attempts < 50) { // Limit attempts to prevent infinite loops
+        while (!placed && attempts < 100) { // Limit attempts per word
             const startRow = Math.floor(Math.random() * rows);
             const startCol = Math.floor(Math.random() * cols);
-            const directionIndex = Math.floor(Math.random() * 8); // 8 directions
-            const directions = [
-                [0, 1], [1, 0], [0, -1], [-1, 0], // Horizontal and Vertical
-                [1, 1], [1, -1], [-1, 1], [-1, -1] // Diagonal
-            ];
+            const directionIndex = Math.floor(Math.random() * 8);
             const [dr, dc] = directions[directionIndex];
 
             let canPlace = true;
             let tempGrid = JSON.parse(JSON.stringify(newGrid)); // Deep copy
 
-            for (let k = 0; k < word.length; k++) {
+            for (let k = 0; k < wordUpper.length; k++) {
                 const r = startRow + k * dr;
                 const c = startCol + k * dc;
 
-                if (r < 0 || r >= rows || c < 0 || c >= cols || (tempGrid[r][c] !== '' && tempGrid[r][c] !== word[k])) {
+                if (r < 0 || r >= rows || c < 0 || c >= cols || (tempGrid[r][c] !== '' && tempGrid[r][c] !== wordUpper[k])) {
                     canPlace = false;
                     break;
                 }
-                tempGrid[r][c] = word[k];
+                tempGrid[r][c] = wordUpper[k];
             }
 
             if (canPlace) {
@@ -194,7 +194,7 @@ function generateGrid(rows, cols) {
             }
             attempts++;
         }
-    }
+    });
 
     // Fill remaining empty cells with random letters
     for (let i = 0; i < rows; i++) {
