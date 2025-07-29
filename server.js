@@ -1,4 +1,3 @@
-
 const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ port: 8080 });
@@ -12,8 +11,43 @@ let gameInProgress = false;
 let gameTimer = 100;
 let timerInterval;
 
-// ... (wordList remains the same)
-const wordList = new Set(['ability', 'able', 'about', 'above', 'accept', 'according', 'account', 'across', 'action', 'activity', 'actually', 'address', 'administration', 'admit', 'adult', 'affect', 'after', 'again', 'against', 'agency', 'agent', 'ago', 'agree', 'agreement', 'ahead', 'allow', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'american', 'among', 'amount', 'analysis', 'and', 'animal', 'another', 'answer', 'any', 'anyone', 'anything', 'appear', 'apply', 'approach', 'area', 'argue', 'around', 'arrive', 'article', 'artist', 'assume', 'attack', 'attention', 'attorney', 'audience', 'author', 'authority', 'available', 'avoid', 'away', 'baby', 'back', 'bad', 'ball', 'bank', 'bar', 'base', 'beautiful', 'because', 'become', 'bed', 'before', 'begin', 'behavior', 'behind', 'believe', 'benefit', 'best', 'better', 'between', 'beyond', 'big', 'bill', 'billion', 'bit', 'black', 'blood', 'blue', 'board', 'body', 'book', 'born', 'both', 'box', 'boy', 'break', 'bring', 'brother', 'budget', 'build', 'building', 'business', 'but', 'buy', 'call', 'camera', 'campaign', 'can', 'cancer', 'candidate', 'capital', 'car', 'card', 'care', 'career', 'carry', 'case', 'catch', 'cause', 'cell', 'center', 'central', 'century', 'certain', 'certainly', 'chair', 'challenge', 'chance', 'change', 'character', 'charge', 'check', 'child', 'choice', 'choose', 'church', 'citizen', 'city', 'civil', 'claim', 'class', 'clear', 'clearly', 'close', 'coach', 'cold', 'collection', 'college', 'color', 'come', 'commercial', 'common', 'community', 'company', 'compare', 'computer', 'concern', 'condition', 'conference', 'congress', 'consider', 'consumer', 'contain', 'continue', 'control', 'cost', 'could', 'country', 'couple', 'course', 'court', 'cover', 'create', 'crime', 'cultural', 'culture', 'cup', 'current', 'customer', 'dark', 'data', 'daughter', 'day', 'dead', 'deal', 'death', 'debate', 'decade', 'decide', 'decision', 'deep', 'defense', 'degree', 'democrat', 'democratic', 'describe', 'design', 'despite', 'detail', 'determine', 'develop', 'development', 'die', 'difference', 'different', 'difficult', 'dinner', 'direction', 'director', 'discover', 'discuss', 'discussion', 'disease', 'doctor', 'dog', 'door', 'down', 'draw', 'dream', 'drive', 'drop', 'drug', 'during', 'each', 'early', 'east', 'easy', 'eat', 'economic', 'economy', 'edge', 'education', 'effect', 'effort', 'eight', 'either', 'election', 'else', 'employee', 'end', 'energy', 'enjoy', 'enough', 'enter', 'entire', 'environment', 'environmental', 'especially', 'establish', 'even', 'evening', 'event', 'ever', 'every', 'everybody', 'everyone', 'everything', 'evidence', 'exactly', 'example', 'executive', 'exist', 'expect', 'experience', 'expert', 'explain', 'eye', 'face', 'fact', 'factor', 'fail', 'fall', 'family', 'far', 'fast', 'father', 'fear', 'federal', 'feel', 'feeling', 'few', 'field', 'fight', 'figure', 'fill', 'film', 'final', 'finally', 'financial', 'find', 'fine', 'finger', 'finish', 'fire', 'firm', 'first', 'fish', 'five', 'floor', 'fly', 'focus', 'follow', 'food', 'foot', 'for', 'force', 'foreign', 'forget', 'form', 'former', 'forward', 'four', 'free', 'friend', 'from', 'front', 'full', 'fund', 'future', 'game', 'garden', 'gas', 'general', 'generation', 'get', 'girl', 'give', 'glass', 'goal', 'good', 'government', 'great', 'green', 'ground', 'group', 'grow', 'growth', 'guess', 'gun', 'guy', 'hair', 'half', 'hand', 'hang', 'happen', 'happy', 'hard', 'have', 'head', 'health', 'hear', 'heart', 'heat', 'heavy', 'help', 'her', 'here', 'herself', 'high', 'him', 'himself', 'his', 'history', 'hit', 'hold', 'home', 'hope', 'hospital', 'hot', 'hotel', 'hour', 'house', 'how', 'however', 'huge', 'human', 'hundred', 'husband', 'idea', 'identify', 'image', 'imagine', 'impact', 'important', 'improve', 'include', 'including', 'increase', 'indeed', 'indicate', 'individual', 'industry', 'information', 'inside', 'instead', 'institution', 'interest', 'interesting', 'international', 'interview', 'into', 'investment', 'involve', 'issue', 'item', 'its', 'itself', 'job', 'join', 'just', 'keep', 'key', 'kid', 'kill', 'kind', 'kitchen', 'know', 'knowledge', 'land', 'language', 'large', 'last', 'late', 'later', 'laugh', 'law', 'lawyer', 'lay', 'lead', 'leader', 'learn', 'least', 'leave', 'left', 'leg', 'legal', 'less', 'let', 'letter', 'level', 'lie', 'life', 'light', 'like', 'likely', 'line', 'list', 'listen', 'little', 'live', 'local', 'long', 'look', 'lose', 'loss', 'lot', 'love', 'low', 'machine', 'magazine', 'main', 'maintain', 'major', 'majority', 'make', 'man', 'manage', 'management', 'manager', 'many', 'market', 'marriage', 'material', 'matter', 'may', 'maybe', 'mean', 'measure', 'media', 'medical', 'meet', 'meeting', 'member', 'memory', 'mention', 'message', 'method', 'middle', 'might', 'military', 'million', 'mind', 'minute', 'miss', 'mission', 'model', 'modern', 'moment', 'money', 'month', 'more', 'morning', 'most', 'mother', 'mouth', 'move', 'movement', 'movie', 'mrs', 'much', 'music', 'must', 'myself', 'name', 'nation', 'national', 'natural', 'nature', 'near', 'nearly', 'necessary', 'need', 'network', 'never', 'new', 'news', 'newspaper', 'next', 'nice', 'night', 'nine', 'north', 'not', 'note', 'nothing', 'notice', 'now', 'number', 'occur', 'off', 'offer', 'office', 'officer', 'official', 'often', 'oil', 'old', 'once', 'one', 'only', 'onto', 'open', 'operation', 'opportunity', 'option', 'order', 'organization', 'other', 'others', 'our', 'out', 'outside', 'over', 'own', 'owner', 'page', 'pain', 'painting', 'paper', 'parent', 'part', 'participant', 'particular', 'particularly', 'partner', 'party', 'pass', 'past', 'patient', 'pattern', 'pay', 'peace', 'people', 'per', 'perform', 'performance', 'perhaps', 'period', 'person', 'personal', 'phone', 'physical', 'pick', 'picture', 'piece', 'place', 'plan', 'plant', 'play', 'player', 'point', 'police', 'policy', 'political', 'politics', 'poor', 'popular', 'population', 'position', 'positive', 'possible', 'power', 'practice', 'prepare', 'present', 'president', 'pressure', 'pretty', 'prevent', 'price', 'private', 'probably', 'problem', 'process', 'produce', 'product', 'production', 'professional', 'professor', 'program', 'project', 'property', 'protect', 'prove', 'provide', 'public', 'pull', 'purpose', 'push', 'put', 'quality', 'question', 'quickly', 'quite', 'race', 'radio', 'raise', 'range', 'rate', 'rather', 'reach', 'read', 'ready', 'real', 'reality', 'realize', 'really', 'reason', 'receive', 'recent', 'recently', 'recognize', 'record', 'red', 'reduce', 'reflect', 'region', 'relate', 'relationship', 'religious', 'remain', 'remember', 'remove', 'report', 'represent', 'republican', 'require', 'research', 'resource', 'respond', 'response', 'responsibility', 'rest', 'result', 'return', 'reveal', 'rich', 'right', 'rise', 'risk', 'road', 'rock', 'role', 'room', 'rule', 'run', 'safe', 'same', 'save', 'say', 'scene', 'school', 'science', 'scientist', 'score', 'sea', 'season', 'seat', 'second', 'section', 'security', 'see', 'seek', 'seem', 'sell', 'send', 'senior', 'sense', 'series', 'serious', 'serve', 'service', 'set', 'seven', 'several', 'sex', 'sexual', 'shake', 'share', 'she', 'shoot', 'short', 'shot', 'should', 'shoulder', 'show', 'side', 'sign', 'significant', 'similar', 'simple', 'simply', 'since', 'sing', 'single', 'sister', 'sit', 'site', 'situation', 'six', 'size', 'skill', 'skin', 'small', 'smile', 'social', 'society', 'soldier', 'some', 'somebody', 'someone', 'something', 'sometimes', 'son', 'song', 'soon', 'sort', 'sound', 'source', 'south', 'southern', 'space', 'speak', 'special', 'specific', 'speech', 'spend', 'sport', 'spring', 'staff', 'stage', 'stand', 'standard', 'star', 'start', 'state', 'statement', 'station', 'stay', 'step', 'still', 'stock', 'stop', 'store', 'story', 'strategy', 'street', 'strong', 'structure', 'student', 'study', 'stuff', 'style', 'subject', 'success', 'successful', 'such', 'suddenly', 'suffer', 'suggest', 'summer', 'support', 'sure', 'surface', 'system', 'table', 'take', 'talk', 'task', 'tax', 'teach', 'teacher', 'team', 'technology', 'television', 'tell', 'ten', 'tend', 'term', 'test', 'than', 'thank', 'that', 'the', 'their', 'them', 'themselves', 'then', 'theory', 'there', 'these', 'they', 'thing', 'think', 'third', 'this', 'those', 'though', 'thought', 'thousand', 'threat', 'three', 'through', 'throughout', 'throw', 'thus', 'time', 'today', 'together', 'tonight', 'too', 'top', 'total', 'tough', 'toward', 'town', 'trade', 'traditional', 'training', 'travel', 'treat', 'treatment', 'tree', 'trial', 'trip', 'trouble', 'true', 'truth', 'try', 'turn', 'two', 'type', 'under', 'understand', 'unit', 'until', 'upon', 'use', 'usually', 'value', 'various', 'very', 'victim', 'view', 'violence', 'visit', 'voice', 'vote', 'wait', 'walk', 'wall', 'want', 'war', 'watch', 'water', 'way', 'weapon', 'wear', 'week', 'weigh', 'welcome', 'well', 'west', 'western', 'what', 'whatever', 'when', 'where', 'whether', 'which', 'while', 'white', 'who', 'whole', 'whom', 'whose', 'why', 'wide', 'wife', 'will', 'win', 'wind', 'window', 'wish', 'with', 'within', 'without', 'woman', 'wonder', 'word', 'work', 'worker', 'world', 'worry', 'would', 'write', 'writer', 'wrong', 'yard', 'yeah', 'year', 'yes', 'yet', 'you', 'young', 'your', 'yourself']);
+// Smaller, more common word list for 7x7 grid
+const wordList = new Set([
+    'cat', 'dog', 'sun', 'run', 'fun', 'big', 'red', 'blue', 'tree', 'fish',
+    'bird', 'moon', 'star', 'play', 'jump', 'sing', 'read', 'book', 'door', 'open',
+    'close', 'hand', 'foot', 'head', 'eyes', 'nose', 'mouth', 'ears', 'hair', 'walk',
+    'talk', 'love', 'like', 'good', 'bad', 'happy', 'sad', 'cold', 'hot', 'warm',
+    'cool', 'fast', 'slow', 'loud', 'soft', 'dark', 'light', 'true', 'false', 'yes',
+    'no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+    'ten', 'zero', 'home', 'work', 'city', 'town', 'park', 'road', 'path', 'way',
+    'time', 'day', 'night', 'week', 'year', 'hour', 'minute', 'second', 'water', 'fire',
+    'wind', 'earth', 'food', 'eat', 'drink', 'sleep', 'dream', 'wake', 'live', 'die',
+    'life', 'death', 'hope', 'fear', 'brave', 'kind', 'mean', 'help', 'give', 'take',
+    'make', 'do', 'go', 'come', 'see', 'look', 'find', 'lose', 'win', 'game',
+    'team', 'ball', 'sport', 'score', 'point', 'start', 'end', 'new', 'old', 'young',
+    'grow', 'fall', 'rise', 'sit', 'stand', 'run', 'walk', 'fly', 'swim', 'drive',
+    'ride', 'ship', 'boat', 'car', 'bus', 'train', 'plane', 'bike', 'road', 'street',
+    'house', 'room', 'bed', 'chair', 'table', 'desk', 'lamp', 'book', 'pen', 'paper',
+    'write', 'read', 'learn', 'teach', 'study', 'school', 'class', 'test', 'exam', 'grade',
+    'pass', 'fail', 'work', 'job', 'boss', 'money', 'pay', 'earn', 'spend', 'save',
+    'bank', 'cash', 'card', 'shop', 'buy', 'sell', 'cost', 'price', 'sale', 'deal',
+    'free', 'busy', 'wait', 'hurry', 'slow', 'fast', 'quick', 'late', 'early', 'soon',
+    'now', 'then', 'here', 'there', 'where', 'when', 'why', 'how', 'what', 'who',
+    'which', 'this', 'that', 'these', 'those', 'them', 'us', 'me', 'you', 'he',
+    'she', 'it', 'we', 'they', 'my', 'your', 'his', 'her', 'its', 'our', 'their',
+    'mine', 'yours', 'hers', 'ours', 'theirs', 'and', 'but', 'or', 'nor', 'for',
+    'yet', 'so', 'if', 'then', 'else', 'when', 'where', 'why', 'how', 'what',
+    'who', 'whom', 'whose', 'which', 'that', 'this', 'these', 'those', 'am', 'is',
+    'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do',
+    'does', 'did', 'can', 'could', 'will', 'would', 'shall', 'should', 'may', 'might',
+    'must', 'of', 'to', 'in', 'on', 'at', 'by', 'with', 'from', 'up',
+    'down', 'out', 'in', 'off', 'on', 'over', 'under', 'about', 'above', 'across',
+    'after', 'against', 'along', 'among', 'around', 'as', 'at', 'before', 'behind', 'below',
+    'beneath', 'beside', 'between', 'beyond', 'but', 'by', 'concerning', 'despite', 'down', 'during',
+    'except', 'for', 'from', 'in', 'inside', 'into', 'like', 'near', 'of', 'off',
+    'on', 'onto', 'out', 'outside', 'over', 'past', 'regarding', 'since', 'through', 'throughout',
+    'to', 'toward', 'under', 'underneath', 'until', 'up', 'upon', 'with', 'within', 'without'
+]);
 
 function broadcast(message) {
     const data = JSON.stringify(message);
@@ -84,7 +118,7 @@ wss.on('connection', ws => {
 
 function startGame() {
     gameInProgress = true;
-    grid = generateGrid(5, 5);
+    grid = generateGrid(7, 7);
     foundWords.clear();
     gameTimer = 100;
 
@@ -159,13 +193,12 @@ function search(word, row, col) {
         let c = col;
         let found = true;
         for (let i = 0; i < word.length; i++) {
-            if (i === 0) continue; // Skip first letter
-            r += dr;
-            c += dc;
             if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] !== word[i]) {
                 found = false;
                 break;
             }
+            r += dr;
+            c += dc;
         }
         if (found) {
             return true;
