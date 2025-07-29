@@ -55,9 +55,42 @@ function generateGrid(rows, cols) {
 }
 
 function isValidWord(word) {
-    // In a real game, you'd check if the word can be formed in the grid.
-    // For this example, we'll just check against our word list.
-    return wordList.has(word);
+    return wordList.has(word) && findWordInGrid(word.toUpperCase());
+}
+
+function findWordInGrid(word) {
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] === word[0] && search(word, i, j)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function search(word, row, col) {
+    // This is a simplified search that only checks horizontally and vertically.
+    // A full implementation would check all 8 directions.
+    const directions = [[0, 1], [1, 0]]; // Right and Down
+
+    for (const [dr, dc] of directions) {
+        let r = row;
+        let c = col;
+        let found = true;
+        for (let i = 0; i < word.length; i++) {
+            if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] !== word[i]) {
+                found = false;
+                break;
+            }
+            r += dr;
+            c += dc;
+        }
+        if (found) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function broadcastWordFound(word, player) {
